@@ -1,0 +1,24 @@
+from ultralytics import YOLO
+import cv2
+
+# Load your trained model
+model = YOLO('runs/train/marble_detector/weights/best.pt')  # or 'marble_detector.pt' if renamed
+
+# Load image
+image_path = 'test.png'
+img = cv2.imread(image_path)
+assert img is not None, "Image not found."
+
+# Run prediction
+results = model(img)
+
+# Get annotated image
+annotated_img = results[0].plot()
+
+# Save and show
+cv2.imwrite('counted_marbles_output.png', annotated_img)
+cv2.imshow('Detected Marbles', annotated_img)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+
+print(f"Detected {len(results[0].boxes)} marbles.")
